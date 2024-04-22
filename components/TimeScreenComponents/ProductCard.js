@@ -11,8 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 function ProductCard({name,img,product}) { 
 const navigation = useNavigation();
-   const [alarm,setalarm] = useState(false);
-   const [expired,setexpired] = useState(false);
+   
    const prdctx = useContext(ProductContext)
     const authCtx = useContext(AuthContext);
     const { t } = useTranslation();
@@ -50,11 +49,11 @@ const navigation = useNavigation();
     const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
 
     if (daysDifference >= 1) {
-        if(daysDifference === 3 && !alarm && !product.alarm){
-            product.alarm = true;
-            prdctx.setAlarm(product.id);
-            setalarm(true);
-            scheduleNotificationHandler(1,'Remaider',product.name + " Only hase 3 days to be removed from Warehouse",{product:product});
+        if(daysDifference === 3  && !product.alarm){
+            //product.alarm = true;
+            //prdctx.setAlarm(product.id);
+            //setalarm(true);
+            //scheduleNotificationHandler(1,'Remaider',product.name + " Only hase 3 days to be removed from Warehouse",{product:product});
 
         }
         return `${daysDifference} day${daysDifference !== 1 ? 's' : ''}`;
@@ -65,11 +64,11 @@ const navigation = useNavigation();
         return `${minutesDifference} minute${minutesDifference !== 1 ? 's' : ''}`;
     } else {
         if (Math.floor(difference/1000) === 0 ){
-           if(!product.expired && !expired){
-            product.expired=true;
-            setexpired(true);
-            prdctx.setExpired(product.id)
-            scheduleNotificationHandler(1,'Product Expired',product.name + " Must Be removed From Warehouse",{product:product});
+           if(!product.expired ){
+            //product.expired=true;
+            //setexpired(true);
+            //prdctx.setExpired(product.id)
+            //scheduleNotificationHandler(1,'Product Expired',product.name + " Must Be removed From Warehouse",{product:product});
            }
            
            

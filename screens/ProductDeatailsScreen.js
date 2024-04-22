@@ -9,7 +9,7 @@ import { Colors } from '../constants/styles';
 import { useTranslation } from 'react-i18next';
 
 function ProductDetailsScreen({ route }) {
-    const { name, price, quantity, img, id } = route.params.product;
+    const { name, price, quantity, img, id,expiry,expired,alarm,capacity,x,y,z } = route.params.product;
     const [cartQuantity, setCartQuantity] = useState(1);
     const cartContext = useContext(CartContext);
     const navigation = useNavigation();
@@ -21,7 +21,7 @@ function ProductDetailsScreen({ route }) {
         if (cartQuantity > quantity) {
             Alert.alert('Invalid quantity', 'You do not have the selected quantity');
         } else {
-            cartContext.addToCart(id, cartQuantity, price, img, name);
+            cartContext.addToCart(id, cartQuantity, price, img, name,expiry,expired,alarm,capacity,x,y,z);
             prdctx.updateProductQuantityById(id, quantity - cartQuantity);
             navigation.navigate('Home');
         }

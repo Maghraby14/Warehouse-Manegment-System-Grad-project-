@@ -21,6 +21,7 @@ function InputData({route}){
     const [profilePic, setProfilePic] = useState(null);
     const [length,setLength] = useState(null);
     const [width,setWidth] = useState(null);
+    const [height,setheight] = useState(null);
     const {t} = useTranslation();
   const pickProfilePic = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -64,7 +65,7 @@ function InputData({route}){
         for (let i = 0; i < parseInt(value); i++) {
             newSections[i] = {
                 name: `Section ${i+1}`,
-                capacity: '',
+                capacity: (length*width*height)/numberofSections,
                 x:0,x1:parseInt(length),
                 y:a,
                 y1:b,
@@ -99,7 +100,7 @@ function InputData({route}){
     async function onSubmithandler() {
         console.log(sections)
         
-        const id= await createuserDatabase(name,sections,robots,authCtx.email,profilePic,parseInt(length),parseInt(width));
+        const id= await createuserDatabase(name,sections,robots,authCtx.email,profilePic,parseInt(length),parseInt(width),parseInt(height));
         //console.log(id);
         //authCtx.setuserDataBaseid(id);  
         authCtx.settingData();
@@ -220,6 +221,14 @@ function InputData({route}){
                     label={'Width of Warehouse'}
                     onUpdateValue={(value)=>{setWidth(value)}}
                     value={width}
+                    keyboardType={'number-pad'}
+
+                    
+                    />
+                    <Input 
+                    label={'height of Warehouse'}
+                    onUpdateValue={(value)=>{setheight(value)}}
+                    value={height}
                     keyboardType={'number-pad'}
 
                     

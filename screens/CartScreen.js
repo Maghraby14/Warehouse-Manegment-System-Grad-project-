@@ -52,7 +52,7 @@ function CartScreen() {
                                 </View>
                                 <TouchableOpacity
                                     style={styles.removeButton}
-                                    onPress={() => removeFromCart(product.id,product.quantity)}
+                                    onPress={() => removeFromCart(product.id,product.quantity,product.img,product.name,product.price,product.expiry,product.expired,product.alarm,product.capacity,product.x,product.y,product.z)}
                                 >
                                     <Text style={styles.removeButtonText}>Remove</Text>
                                 </TouchableOpacity>

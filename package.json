@@ -17,6 +17,7 @@
     "expo-image-picker": "^14.7.1",
     "expo-notifications": "~0.27.6",
     "expo-status-bar": "~1.11.1",
+    "firebase": "^10.11.0",
     "i18n-js": "^4.4.3",
     "i18next": "^23.10.1",
     "intl-pluralrules": "^2.0.1",

@@ -7,11 +7,13 @@ import { ProductContext } from '../store/products-data';
 import { Colors } from '../constants/styles';
 import * as Animatable from 'react-native-animatable';
 import { useTranslation } from 'react-i18next';
+import {FirebaseDataContext} from '../store/firebase-data'
+
 function ProductsScreen() {
     const auth = useContext(AuthContext);
    const {t} = useTranslation()
    const products=useContext(ProductContext);
-    
+   const {firebaseData,updateData } = useContext(FirebaseDataContext);    
 
     return (
         <ImageBackground source={auth.darkMode ?  require('../assets/Frame 7 (3).png') :require('../assets/Frame 7 (1).png')} style={styles.container}>
@@ -19,7 +21,7 @@ function ProductsScreen() {
                {products.products.map((section, sectionIndex) => (
                             <View key={sectionIndex} style={styles.section}>
                                 <View style={[styles.secctr,{backgroundColor: auth.darkMode ? Colors.darksec : Colors.white}]}>
-                                <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{t('Section')} {sectionIndex+1}</Text>
+                                <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{firebaseData.Space[sectionIndex].label}</Text>
                                  <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{t('total')}: {section.length}</Text>
                                 </View>
                             
@@ -27,11 +29,7 @@ function ProductsScreen() {
                                 {section.map((product, productIndex) => (
                                    <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
                                    <Productitem
-                                       img={product.img}
-                                       price={product.price}
-                                       quantity={product.quantity}
-                                       name={product.name}
-                                       id={product.id}
+                                       product={product}
                                    />
                                </Animatable.View>
                                 ))}

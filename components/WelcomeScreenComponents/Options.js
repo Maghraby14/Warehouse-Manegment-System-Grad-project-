@@ -13,7 +13,12 @@ function Options(){
     
 await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${auth.userDataBaseid}.json`, {
   "Email": "mnelmaghraby145@gmail.com",
-  "Owner": "Abdallah walid",
+  "Owner": "Mohamed El-Maghraby",
+  "Cart":"",
+  "Capacity":300,
+  "height":3,
+  "length":10,
+  "width":10,
   "Robots": [
 
     {
@@ -26,8 +31,13 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
   "Space": [
     
     {
-      "capacity": 10,
+      "capacity": 150,
       "name": "Section 1",
+      "label":'Monazefat',
+      "x": 0,
+      "y": 0,
+      "x1": 10,
+      "y1": 5,      
       "products": [
         {
           "capacity": 5,
@@ -39,6 +49,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 19,
           "expired":false,
           'alarm':false,
+          "x": 5,
+          "y": 1,
+          "z":5,
         },
         {
           "capacity": 5,
@@ -50,12 +63,20 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 15,
           "expired":false,
           'alarm':false,
+          "x": 6,
+          "y": 3,
+          "z":5,
         }
       ]
     },
     {
-      "capacity": 20,
+      "capacity": 150,
+      "label":'Food',
       "name": "Section 2",
+      "x": 0,
+      "y": 5,
+      "x1": 10,
+      "y1": 10,
       "products": [
         {
           "capacity": 5,
@@ -67,6 +88,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 6,
           "expired":false,
           'alarm':false,
+          "x": 7,
+          "y": 7,
+          "z":5,
         },
         {
           "capacity": 2,
@@ -78,6 +102,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 21,
           "expired":false,
           'alarm':false,
+          "x": 8,
+          "y": 6,
+          "z":5,
         },
         {
           "capacity": 3,
@@ -89,6 +116,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 22,
           "expired":false,
           'alarm':false,
+          "x": 1,
+          "y": 8,
+          "z":5,
         },
         {
           "capacity": 2,
@@ -100,6 +130,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 12,
           "expired":false,
           'alarm':false,
+          "x": 4,
+          "y": 9,
+          "z":5,
         },
         {
           "capacity": 1,
@@ -111,6 +144,9 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
           "quantity": 11,
           "expired":false,
           'alarm':false,
+          "x": 2,
+          "y": 7,
+          "z":5,
         }
       ]
     }
@@ -230,7 +266,8 @@ const styles = StyleSheet.create({
         
         alignItems:'center',
         justifyContent: 'center',
-        marginVertical:20
+        marginTop:20,
+        borderWidth:0
     }, a:{
         flex:1
     }

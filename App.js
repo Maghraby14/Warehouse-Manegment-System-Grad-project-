@@ -8,7 +8,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import { Colors } from './constants/styles';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
 import CartContextProvider from './store/cart-context';
-import { useContext } from 'react';
+import { createContext, useContext } from 'react';
 import IconButton from './components/ui/IconButton';
 import {Ionicons,MaterialCommunityIcons,MaterialIcons} from '@expo/vector-icons';
 import ProductsScreen from './screens/ProductsScreen';
@@ -21,12 +21,15 @@ import TimeScreen from './screens/TimeScreen';
 import OrdersScreen from './screens/OrdersScreen';
 import InputData from './screens/InputData';
 import ProductDetailsScreen from './screens/ProductDeatailsScreen';
-import ProductContextProvider from './store/products-data';
+import ProductContextProvider, { ProductContext } from './store/products-data';
 import LanguagesScreen from './screens/LanguagesScreen';
 import { useTranslation } from 'react-i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
 import * as Notifications from 'expo-notifications';
-
+import { initializeApp } from "firebase/app";
+import firebaseConfig from './src/firebaseConfig';
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { FirebaseDataContext,FirebaseDataProvider } from './store/firebase-data';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({ 
       
@@ -181,8 +184,10 @@ function AuthenticatedStack() {
 function Navigation() {
   const authCtx =useContext(AuthContext);
   const {t} = useTranslation();
+  
   return (
-   
+    <FirebaseDataContext.Consumer>
+      {(firebaseData) => (
       <NavigationContainer>
       {!authCtx.isAuthenticated && <AuthStack />}
       {authCtx.isAuthenticated && 
@@ -271,22 +276,44 @@ function Navigation() {
       
       
     </NavigationContainer>
-    
-    
+   )}
+     </FirebaseDataContext.Consumer>
   );
 }
 
 export default function App() {
+ /* const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  
+ 
+  const updateProducts = ref(db, 'Warhouses/');
+  onValue(updateProducts, (snapshot) => { const data = snapshot.val();
+   /*let allProducts = [];
+    data.map((item)=>{
+      if(item.products){
+        console.log(item)
+        
+      }
+    })
+    //products.loadProducts(allProducts);
+console.log(data)});
+  */
+  
   return (
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
+      <FirebaseDataProvider>
       <ProductContextProvider>
+      
+      
       <CartContextProvider>
       <Navigation />
       </CartContextProvider>
-      </ProductContextProvider>
       
+      
+      </ProductContextProvider>
+      </FirebaseDataProvider>
       </AuthContextProvider>
     </>
   );

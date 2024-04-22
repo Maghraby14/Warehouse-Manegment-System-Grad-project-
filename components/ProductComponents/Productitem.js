@@ -4,13 +4,13 @@ import { AuthContext } from "../../store/auth-context";
 import { useContext } from "react";
 import { Colors } from "../../constants/styles";
 import { useTranslation } from "react-i18next";
-function ProductItem({ img, name, price, quantity, onPress,id }) {
+function ProductItem({ product, onPress,id }) {
     const navigation = useNavigation();
     const authCtx = useContext(AuthContext);
     const {t} = useTranslation();
     const handlePress = () => {
         navigation.navigate('ProductDetails', {
-            product: { img, name, price, quantity,id }
+            product: product
         });
     };
   return (
@@ -25,12 +25,12 @@ function ProductItem({ img, name, price, quantity, onPress,id }) {
     ]}
 >
       <View style={styles.imageContainer}>
-        <Image source={{ uri: img }} style={styles.image} />
+        <Image source={{ uri: product.img }} style={styles.image} />
       </View>
       <View style={[styles.infoContainer]}>
-        <Text style={[styles.name,{color: authCtx.darkMode? Colors.white: '#000'}]}>{name}</Text>
-        <Text style={styles.price}>{t('Price')}: ${price}</Text>
-        <Text style={styles.quantity}>{t("Quantity")}: {quantity}</Text>
+        <Text style={[styles.name,{color: authCtx.darkMode? Colors.white: '#000'}]}>{product.name}</Text>
+        <Text style={styles.price}>{t('Price')}: ${product.price}</Text>
+        <Text style={styles.quantity}>{t("Quantity")}: {product.quantity}</Text>
       </View>
     </Pressable>
   );
