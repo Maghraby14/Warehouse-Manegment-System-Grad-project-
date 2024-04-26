@@ -16,13 +16,17 @@ export const ProductContext = createContext({
     increaseProductQuantityById: (idToUpdate, quantityToAdd) => {},
     setExpired: (idToUpdate) => {},
     setAlarm: (idToUpdate) => {},
-    addNewProduct:(secindex,id,quantity,img,name,price,expiry)=>{}
+    addNewProduct:(secindex,id,quantity,img,name,price,expiry)=>{},
+    space:[],
+    
 });
 
 function ProductContextProvider({ children }) {
+
     const [Products, setProducts] = useState([]);
     const authctx = useContext(AuthContext);
     const [capacity,setCapacity] = useState('');
+    const [Space,setSpace]=useState([]);
     const {firebaseData,updateData } = useContext(FirebaseDataContext);
     //const app = initializeApp(firebaseConfig);
     //const db = getDatabase(app);
@@ -45,13 +49,14 @@ function ProductContextProvider({ children }) {
     async function removeFromProducts(idToRemove) {
         
         try {
-            const updatedProducts = Products.map(section => section.filter(product => product.id !== idToRemove));
+            const updatedProducts = Products.map((section) => section.filter(product => product.id !== idToRemove));
+            const sectionIndex = Products.findIndex((section) => section.some(product => product.id === idToRemove));
+
             
-            for (let i = 0; i < updatedProducts.length; i++) {
-                    
-                    await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${i}.json`, {products:updatedProducts[i]});
-            }
-            setProducts(updatedProducts);
+                updateData(`Warhouses/${authctx.userDataBaseid}/Space/${sectionIndex}`,{products:updatedProducts[sectionIndex]})
+                    //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${i}.json`, {products:updatedProducts[i]});
+            
+           // setProducts(updatedProducts);
         } catch (error) {
             console.error('Error updating product quantity:', error);
             // Handle error
@@ -82,7 +87,7 @@ function ProductContextProvider({ children }) {
             updateData(`Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}`,updatedProducts[sec][pro])
                 //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}.json`, updatedProducts[sec][pro]);
         
-            setProducts(updatedProducts);
+            //setProducts(updatedProducts);
             }
             
         } catch (error) {
@@ -107,7 +112,7 @@ function ProductContextProvider({ children }) {
             updateData(`Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}`,updatedProducts[sec][pro])
             //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}.json`, updatedProducts[sec][pro]);
         
-            setProducts(updatedProducts);
+           // setProducts(updatedProducts);
         } catch (error) {
             console.error('Error updating product quantity:', error);
             // Handle error
@@ -130,7 +135,7 @@ function ProductContextProvider({ children }) {
             updateData(`Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}`,updatedProducts[sec][pro])
             //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}.json`, updatedProducts[sec][pro]);
         
-            setProducts(updatedProducts);
+           // setProducts(updatedProducts);
         } catch (error) {
             console.error('Error updating product quantity:', error);
             // Handle error
@@ -155,7 +160,8 @@ function ProductContextProvider({ children }) {
         updateData(`Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}`,updatedProducts[sec][pro])
         //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${sec}/products/${pro}.json`, updatedProducts[sec][pro]);
     
-        setProducts(updatedProducts);}
+    //    setProducts(updatedProducts);
+    }
         catch(err) {
             console.log('hi');
             console.log(err);
@@ -179,7 +185,7 @@ function ProductContextProvider({ children }) {
           
           await axios.put(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}/Space/${secindex}/products.json`, updatedProducts[secindex]);
       
-          setProducts(updatedProducts);
+          //setProducts(updatedProducts);
           console.log("INPRRR"+Products);
         } catch (err) {
           console.log('hi');
@@ -188,7 +194,17 @@ function ProductContextProvider({ children }) {
       }
 
     function loadProducts(array) {
-        setProducts(array);
+        let allProducts = [];
+        array.map((item) => {
+            if (item.products) {
+              allProducts.push(item.products);
+            }
+            else{
+                allProducts.push([])
+            }
+            
+          })
+        setProducts(allProducts);
     }
 
     const value = {
@@ -201,7 +217,9 @@ function ProductContextProvider({ children }) {
         setAlarm:setAlarm,
         getCapacity:SetCapacity,
         WarehouseCapacity:capacity,
-        addNewProduct:addNewProduct
+        addNewProduct:addNewProduct,
+        space:Space,
+        
     };
 
     return <ProductContext.Provider value={value}>{children}</ProductContext.Provider>;

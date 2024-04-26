@@ -20,20 +20,31 @@ function ProductsScreen() {
            {products.products && <ScrollView contentContainerStyle={styles.scrollView}>
                {products.products.map((section, sectionIndex) => (
                             <View key={sectionIndex} style={styles.section}>
+                                {products.products[sectionIndex].length === 0 &&
                                 <View style={[styles.secctr,{backgroundColor: auth.darkMode ? Colors.darksec : Colors.white}]}>
                                 <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{firebaseData.Space[sectionIndex].label}</Text>
-                                 <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{t('total')}: {section.length}</Text>
+                                 <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{t('total')}: {0}</Text>
                                 </View>
-                            
+                                }
+                                {
+                                    products.products[sectionIndex].length > 0 &&
+                                 <View style={[styles.secctr,{backgroundColor: auth.darkMode ? Colors.darksec : Colors.white}]}>
+                                <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{firebaseData.Space[sectionIndex].label}</Text>
+                                 <Text style={[styles.sectionTitle,{color:auth.darkMode ? Colors.white : '#000'}]}>{t('total')}: {products.products[sectionIndex].length}</Text>
+                                </View>                                }
+                                
+                            {products.products[sectionIndex].length >0 &&
                             <View style={styles.productContainer}>
-                                {section.map((product, productIndex) => (
-                                   <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
-                                   <Productitem
-                                       product={product}
-                                   />
-                               </Animatable.View>
-                                ))}
-                            </View>
+                            {section.map((product, productIndex) => (
+                               <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
+                               <Productitem
+                                   product={product}
+                               />
+                           </Animatable.View>
+                            ))}
+                             </View>
+                            }
+                            
                         </View>
 ))}
             </ScrollView> }

@@ -32,15 +32,16 @@ function ProductDetailsScreen({ route }) {
             <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={styles.container}>
                 <Animatable.View animation="fadeIn" duration={1000} style={styles.content}>
                     <Animatable.Image animation="fadeIn" duration={1000} source={{ uri: img }} style={styles.image} />
-                    <Animatable.View animation="fadeIn" duration={1000} style={[styles.ctr, { backgroundColor: authCtx.darkMode ? Colors.darksec2 : Colors.white }]}>
-                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode ? Colors.white : '#000' }]}>{t('name')}: {name}</Animatable.Text>
-                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode ? Colors.white : '#000' }]}>{t("Price")}: ${price}</Animatable.Text>
-                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode ? Colors.white : '#000' }]}>{t("Quantity")}: {quantity}</Animatable.Text>
+                    <Animatable.View animation="fadeIn" duration={1000} style={[styles.ctr, { backgroundColor: authCtx.darkMode && !expired ? Colors.darksec2 : !authCtx.darkMode && !expired ? Colors.white : Colors.primary500 }]}>
+                   {expired && <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}>{"Product Expired !!"}</Animatable.Text> }
+                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}>{t('name')}: {name}</Animatable.Text>
+                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}>{t("Price")}: ${price}</Animatable.Text>
+                        <Animatable.Text animation="fadeIn" duration={1000} style={[styles.text, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}>{t("Quantity")}: {quantity}</Animatable.Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%' }}>
                             <View style={styles.quantityContainer}>
-                                <Text style={[styles.quantityText, { color: authCtx.darkMode ? Colors.white : '#000' }]}>{t("Quantity")}:</Text>
+                                <Text style={[styles.quantityText, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}>{t("Quantity")}:</Text>
                                 <TextInput
-                                    style={[styles.quantityInput, { color: authCtx.darkMode ? Colors.white : '#000' }]}
+                                    style={[styles.quantityInput, { color: authCtx.darkMode && !expired ? Colors.white : !authCtx.darkMode && !expired ? 'black' : Colors.white }]}
                                     keyboardType="numeric"
                                     value={cartQuantity.toString()}
                                     onChangeText={text => setCartQuantity(text)}

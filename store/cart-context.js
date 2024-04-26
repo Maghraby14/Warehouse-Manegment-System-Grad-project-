@@ -55,7 +55,7 @@ function CartContextProvider({ children }) {
         if (productInCart) {
             const updatedCart = cartProducts.map((product) => {
                 if (product.id === id) {
-                    return { ...product, quantity: parseInt(quantity) + product.quantity };
+                    return { ...product, quantity: parseInt(quantity) + parseInt(product.quantity) };
                 } else {
                     return product;
                 }

@@ -57,7 +57,7 @@ function TimeScreen({navigation}) {
                 {prdctx.products.map((section, sectionIndex) => ( section.map((product, productIndex) => (
                                    <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
                                   
-                                   <ProductCard  product={product} />
+                                   <ProductCard  product={product} expiry={product.expiry} />
                                </Animatable.View>
                 ))))}
     

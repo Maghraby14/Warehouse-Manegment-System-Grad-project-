@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { Colors } from "../../constants/styles";
 import i18next from '../../services/i18next';
 import {useTranslation} from 'react-i18next';
+
 function ProfileCard({ name,uri }) {
   const authCtx = useContext(AuthContext);
   const {t} = useTranslation();

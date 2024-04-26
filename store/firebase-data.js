@@ -37,6 +37,15 @@ export const FirebaseDataProvider = ({ children }) => {
       console.error("Error updating data: ", error);
     }
   }
+  async function removeData(path) {
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      await remove(ref(db, path));
+    } catch (error) {
+      console.error("Error removing data: ", error);
+    }
+  }
 
-  return <FirebaseDataContext.Provider value={{firebaseData,updateData}}>{children}</FirebaseDataContext.Provider>;
+  return <FirebaseDataContext.Provider value={{firebaseData,updateData,removeData}}>{children}</FirebaseDataContext.Provider>;
 };

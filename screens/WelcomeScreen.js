@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View ,PanResponder,Dimensions, FlatList} from 'react-native';
 import ProfileCard from '../components/WelcomeScreenComponents/ProfileCard';
 import Options from '../components/WelcomeScreenComponents/Options';
 import { useEffect, useState ,useContext, useLayoutEffect} from 'react';
@@ -12,11 +12,17 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import {FirebaseDataContext} from '../store/firebase-data'
 import { Colors } from '../constants/styles';
+import FeedItem from '../components/WelcomeScreenComponents/FeedItem';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 function WelcomeScreen({navigation,route}) {
   const authCtx =useContext(AuthContext);
   const [dataLoaded,setdataLoaded] =useState(false);
   const [alarm,setalarm] = useState(false);
    const [expired,setexpired] = useState(false);
+   const [feed,setfeed] = useState([
+    
+   ]);
    const { firebaseData, updateData } = useContext(FirebaseDataContext);
    
 
@@ -33,7 +39,15 @@ function WelcomeScreen({navigation,route}) {
         const responsee = await axios.get(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${key}`+'.json');
         
         authCtx.setName(responsee.data['Owner']);
-        authCtx.setimage(responsee.data['uri']);
+        if(responsee.data['uri']){
+          authCtx.setimage(responsee.data['uri']);
+          
+        }
+        else {
+          authCtx.setimage('https://imgv3.fotor.com/images/blog-richtext-image/10-profile-picture-ideas-to-make-you-stand-out.jpg');
+          console.log('hi img')
+        }
+        
         setdataLoaded(true);
         
            }
@@ -57,14 +71,15 @@ function WelcomeScreen({navigation,route}) {
           let WarehouseCapacity = 0;
   
           response.map( (item) => {
-            if (item.products) {
-              allProducts.push(item.products);
+            if (item) {
+              allProducts.push(item);
             }
             WarehouseCapacity += parseInt(item.capacity);
           })
   
           products.loadProducts(allProducts);
           products.getCapacity(WarehouseCapacity);
+          //console.log(firebaseData.Space)
         }
       } catch (error) {
         console.log('Error fetching data:', error);
@@ -81,6 +96,16 @@ function WelcomeScreen({navigation,route}) {
     const subscrition = Notifications.addNotificationReceivedListener((notification)=>{
         console.log('Notification Received')
         if(notification.request.content.data.product){
+        //console.log(notification.request.content)
+        setfeed(prev => [
+          ...prev,
+          {
+              title: notification.request.content.title,
+              body: notification.request.content.body,
+              data: notification.request.content.data
+          }
+      ]);
+      console.log(feed);
           setalarm(false);
         setexpired(false);
         }
@@ -154,7 +179,7 @@ useEffect(() => {
         setalarm(true);
         scheduleNotificationHandler(1, 'Remaider', product.name + " Only has 3 days to be removed from Warehouse", { product: product });
       }
-     else if(Math.floor(difference / 1000) === 0) {
+     else if(Math.floor(difference / 1000) < 0) {
         if (!product.expired && !expired) {
           product.expired = true;
           setexpired(true);
@@ -165,30 +190,44 @@ useEffect(() => {
     }
   };
 
-  products.products.forEach((sec) => {
-    sec.forEach((pro) => {
-      getDateDifference(pro);
+  const interval = setInterval(() => {
+    products.products.forEach((sec) => {
+      sec.forEach((pro) => {
+        getDateDifference(pro);
+      });
     });
-  });
-}, [products.products]);
+  }, 1000);
 
-  return (
-    <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={{flex:1}}>
-      
-      { dataLoaded &&   
-      <View style={{alignItems:'center',flex:1 }}>
-      <ProfileCard name={authCtx.name} uri={authCtx.profuri}/>
-      <Options />
-      <View  style={styles.section}>
-                                <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.white}]}>
-                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Feed'} </Text>
-                                 
-                                </View> 
-      </View> 
-      </View> }
-      {!dataLoaded &&  <LoadingOverlay message='Loading Your Data'/>}
-    </ImageBackground>
-  );
+  return () => clearInterval(interval);
+}, [products.products]);
+const handleClearFeed = (index) => {
+  setfeed(prev => prev.filter((_, idx) => idx !== index));
+};
+
+
+return (
+  <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={{ flex: 1 }}>
+    {dataLoaded &&   
+      <View style={{ alignItems: 'center', flex: 1 }}>
+        <ProfileCard name={authCtx.name} uri={authCtx.profuri}/>
+        <Options />
+        <View style={styles.section}>
+          <View style={[styles.secctr, { backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.primary100 }]}>
+            <Text style={[styles.sectionTitle, { color: authCtx.darkMode ? Colors.white : '#fff' }]}>Feed</Text>
+            <TouchableOpacity onPress={() => setfeed([])} style={styles.clearAllButton}>
+              <Text style={styles.clearAllButtonText}>Clear All</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+
+        
+      </View>
+    }
+    {!dataLoaded && <LoadingOverlay message='Loading Your Data'/>}
+  </ImageBackground>
+);
+
   /* <View style={styles.rootContainer}>
   <Text style={styles.title}>Welcome!</Text>
   <Text>You authenticated successfully!</Text>
@@ -213,20 +252,82 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     margin: 10,
-},
-section: {
-    marginBottom: 10 ,flex:1 ,borderWidth:0,width:'90%'     
+    flex: 1,
+    color: 'white',
+  },
+  section: {
+    marginBottom: 10,
+    borderWidth: 0,
+    width: '95%',
+    height: 70,
+    marginTop: 1,
+  },
+  secctr: {
+    flexDirection: 'row',
+    padding: 8,
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    flex: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: '100%',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.primary100,
+  },
+  feedContainer: {
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: 340,
+  },
+  feedTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 0,
+    color: '#000',
+  },
+  feedProduct: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  feedBody: {
+    fontSize: 14,
+    color: '#000',
+  },
+  clearButton: {
     
-},
-secctr:{
-    flexDirection:'row', justifyContent:'space-between',padding:8 ,borderRadius:10,alignItems:'center',shadowColor: '#000',
-shadowOffset: {
-  width: 0,
-  height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
-elevation: 5,
-
-}
+    padding: 8,
+    borderRadius: 5,
+    marginTop: 5,
+    alignItems: 'center',
+  },
+  clearButtonText: {
+    color: Colors.white,
+  },
+  clearAllButton: {
+    backgroundColor: 'transparent',
+    padding: 8,
+    borderRadius: 5,
+    marginTop: 5,
+    alignItems: 'center',
+  },
+  clearAllButtonText: {
+    color: Colors.white,
+  },
 });
