@@ -20,7 +20,7 @@ function ProductCard({name,img,product}) {
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeRemaining(getDateDifference(product.expiry));
-        }, 1000);
+        }, 100);
         return () => clearInterval(interval);
     }, [product.expiry]);
 

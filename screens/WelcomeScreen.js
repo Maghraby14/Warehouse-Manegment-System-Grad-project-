@@ -66,7 +66,7 @@ function WelcomeScreen({navigation,route}) {
       try {
         if (authCtx.userDataBaseid) {
           //console.log(db[authCtx.userDataBaseid].Space);
-          const response = firebaseData.Space;
+          const response = firebaseData;
           let allProducts = [];
           let WarehouseCapacity = 0;
   
@@ -219,7 +219,22 @@ return (
             </TouchableOpacity>
           </View>
         </View>
-        
+        {
+          feed.length>0 && 
+          <GestureHandlerRootView style={{ width:'100%' ,alignItems: 'center', paddingBottom: 10}} contentContainerStyle={{ alignItems: 'center', paddingBottom: 10,justifyContent:'center' }}>
+          
+            <FlatList 
+            data={feed}
+            renderItem={({item,index})=>{
+              return <FeedItem key={index} index={index} title={item.title} onPress={() => handleClearFeed(index)} body={item.body}  onMove={()=>{navigation.navigate('ProductDetails',{
+                product:item.data.product
+            })}}/>; 
+            }}
+            />
+            
+          
+        </GestureHandlerRootView>
+        }
 
         
       </View>

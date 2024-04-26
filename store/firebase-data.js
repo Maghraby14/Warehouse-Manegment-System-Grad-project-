@@ -16,7 +16,7 @@ export const FirebaseDataProvider = ({ children }) => {
     const fetchData = async () => {
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
-      const updateProducts = ref(db, `Warhouses/${authCtx.userDataBaseid}/`);
+      const updateProducts = ref(db, `Warhouses/${authCtx.userDataBaseid}/Space`);
       onValue(updateProducts, (snapshot) => {
         const data = snapshot.val();
         setFirebaseData(data);

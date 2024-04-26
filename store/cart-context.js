@@ -88,9 +88,9 @@ function CartContextProvider({ children }) {
              prdctx.increaseProductQuantityById(id, quantity);
             }
             else{
-                for (let secindex = 0; secindex < firebaseData.Space.length; secindex++) {
-                    console.log(firebaseData.Space[0].y1)
-                    if (firebaseData.Space[secindex].y < y && firebaseData.Space[secindex].y1 > y){
+                for (let secindex = 0; secindex < firebaseData.length; secindex++) {
+                    console.log(firebaseData[0].y1)
+                    if (firebaseData[secindex].y < y && firebaseData[secindex].y1 > y){
                         setCartProducts((current) => current.filter((product) => product.id !== id));
                       console.log('IN CART' , secindex, id, quantity, img, name, price)
                       prdctx.addNewProduct(secindex, id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z);
