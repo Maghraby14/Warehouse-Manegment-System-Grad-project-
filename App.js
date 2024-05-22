@@ -30,6 +30,13 @@ import { initializeApp } from "firebase/app";
 import firebaseConfig from './src/firebaseConfig';
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { FirebaseDataContext,FirebaseDataProvider } from './store/firebase-data';
+import SectionDetailsScreen from './screens/SectionDetailsScreen';
+import RobotsContextProvider from './store/robots-context';
+import OrdersContextProvider from './store/order-context';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import PendingOrdersScreen from './screens/PendingOrdersScreen';
+import OngoingOrdersScreen from './screens/OngoingOrdersScreen';
+import ScheduldedOrdersScreen from './screens/ScheduledOrdersScreen';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({ 
       
@@ -43,6 +50,7 @@ Notifications.setNotificationHandler({
 });
 const Stack = createNativeStackNavigator();
 const BottomsTabs = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 function SignUpStack(){
   const {t} = useTranslation();
   return (
@@ -83,6 +91,37 @@ function SignUpStack(){
     </Stack.Navigator>
   );
 }
+function MyTabs() {
+  const authCtx = useContext(AuthContext)
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: Colors.white,
+        tabBarActiveTintColor: Colors.white,
+        tabBarIndicatorStyle:{backgroundColor:Colors.white}
+      }}
+ 
+    >
+      <Tab.Screen 
+        name="Scheduled" 
+        component={ScheduldedOrdersScreen} 
+        options={{ title: 'Scheduled' ,   tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  } }}
+      />
+      <Tab.Screen 
+        name="Pending" 
+        component={PendingOrdersScreen} 
+        options={{ title: 'Pending' ,  tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  } }}
+      />
+      <Tab.Screen 
+        name="Ongoing" 
+        component={OngoingOrdersScreen} 
+        options={{ title: 'Ongoing'  ,   tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  }}}
+      />
+    </Tab.Navigator>
+  );
+}
+
 function AuthStack() {
   
   const {t} = useTranslation();
@@ -247,10 +286,15 @@ function Navigation() {
         headerStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  },
       })} 
       />
-      <Stack.Screen name='Orders' component={OrdersScreen} 
-      options={{
+      <Stack.Screen name='Orders' component={MyTabs} 
+       options={({navigation})=>({
         title:t('orders'),
-      }}
+        headerRight:({tintColor}) =>(
+          <IconButton icon='cart' color={tintColor} size={24} onPress={()=>{navigation.navigate('Cart')}} />
+          
+        ),
+        headerStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  },
+      })} 
       />
       
       <Stack.Screen name='ProductDetails' component={ProductDetailsScreen} options={{
@@ -267,7 +311,11 @@ function Navigation() {
         headerTintColor: Colors.white,
       }}
       />
-      
+      <Stack.Screen name='SectionDetails' component={SectionDetailsScreen} options={{
+        headerStyle: { backgroundColor: authCtx.darkMode? Colors.darkprimary : Colors.primary100  },
+        headerTintColor: Colors.white,
+      title:t('productDetails')
+    }}/>
 
       
       </Stack.Navigator>
@@ -305,13 +353,16 @@ console.log(data)});
       <AuthContextProvider>
       <FirebaseDataProvider>
       <ProductContextProvider>
-      
-      
       <CartContextProvider>
-      <Navigation />
+<RobotsContextProvider>
+  <OrdersContextProvider>
+<Navigation />
+</OrdersContextProvider>
+</RobotsContextProvider>
+      
+
+
       </CartContextProvider>
-      
-      
       </ProductContextProvider>
       </FirebaseDataProvider>
       </AuthContextProvider>

@@ -8,20 +8,20 @@ import ProductCard from '../components/SpaceScreenComponents/ProductCard';
 import * as Animatable from 'react-native-animatable'; // Import Animatable library
 import ProfileButton from '../components/ProfileScreenComponents/ProfileButton';
 import {FirebaseDataContext} from '../store/firebase-data'
-function SpaceScreen({navigation}) {
+function SectionDetailsScreen({navigation,route}) {
+    const { capacity, label, name, products} = route.params.section;
     const authCtx = useContext(AuthContext);
     const prdctx = useContext(ProductContext);
     const {firebaseData,updateData } = useContext(FirebaseDataContext);
     let occupiedSpace = 0; 
-    prdctx.products.map((section) =>{
-        section.map((product) =>{
+    products.map((product) =>{
             occupiedSpace += product.quantity
-        }
-        )
+        
+        
         
     })
     //console.log(ocupied);
-    const totalSpace = prdctx.WarehouseCapacity; // Example total space value
+    const totalSpace = capacity; // Example total space value
      // Example occupied space value
 
     return (
@@ -30,24 +30,10 @@ function SpaceScreen({navigation}) {
         alignItems: 'center' }} >
             <ScrollView contentContainerStyle={{paddingBottom:40}}>
                 
-                <View style={{flex:1}}>
-                <View  style={styles.sectionn}>
-                <Text style={[styles.sectionTitlee,{color:authCtx.darkMode ? Colors.white : '#fff'},{textAlign:'center'}]}>{'Sections'} </Text>
-                                <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.sec100},{flexWrap:'wrap'}]}>
-                                {firebaseData.map((data, index) => (
-                                    <ProfileButton key={index} onPress={()=>{
-                                        navigation.navigate('SectionDetails',{
-                                            section:data
-                                        })
-                                    }}>{data.label}</ProfileButton>
-                                    
-                                    ))}
-                                    
-                                 </View>   
-                </View>    
+                <View style={{flex:1}}>    
                 <View  style={styles.section}>
                                 <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.white}]}>
-                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Warehouse'} </Text>
+                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{label} </Text>
                                  <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {totalSpace}</Text>
                                  </View>   
                 </View>
@@ -68,12 +54,12 @@ function SpaceScreen({navigation}) {
                    
                </View>
                <View style={{flex:1,alignItems:'center'}}>
-               {prdctx.products.map((section, sectionIndex) => ( section.map((product, productIndex) => (
+               {products.map((product, productIndex) => (
                                    <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
                                   
                                    <ProductCard  product={product} />
                                </Animatable.View>
-                ))))}
+                ))}
                </View>
                
 
@@ -84,7 +70,7 @@ function SpaceScreen({navigation}) {
     );
 }
 
-export default SpaceScreen;
+export default SectionDetailsScreen;
 
 const styles = StyleSheet.create({
     container: {

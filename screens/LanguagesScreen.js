@@ -14,7 +14,7 @@ const LanguagesScreen = () => {
   const authCtx = useContext(AuthContext);
 
   return (
-    <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png'):require('../assets/Frame 7 (1).png')} style={{ flex: 1 }}>
+    <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100}} >
     <View style={styles.container}>
     <View style={[{backgroundColor: authCtx.darkMode ? Colors.darksec : 'white',alignItems: 'center',borderRadius: 20,
     marginTop: 20,
@@ -93,7 +93,7 @@ const LanguagesScreen = () => {
     </View>
     </View>
     
-    </ImageBackground>
+    </View>
   );
 };
 

@@ -164,7 +164,9 @@ function EditProfileScreen() {
                 if (robot.name === name) {
                     return {
                         ...robot,
-                        maintenancedate: value
+                        maintenancedate: value,
+                        condition:'f',
+                        health:100
                     };
                 }
                 return robot;
@@ -268,7 +270,7 @@ async function updateRobotsInDb(){
 }
     return (
         <KeyboardAvoidingView style={{ flex: 1,resizeMode: 'cover' }} behavior='padding'>
-        <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={{ flex: 1 }}>
+        <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100}} >
            <ScrollView>
             
             <View style={styles.container}>
@@ -603,7 +605,7 @@ async function updateRobotsInDb(){
             
            </ScrollView>
             
-        </ImageBackground>
+        </View>
         </KeyboardAvoidingView>
         
     );

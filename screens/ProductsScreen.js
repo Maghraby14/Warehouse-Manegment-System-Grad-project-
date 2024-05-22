@@ -16,7 +16,8 @@ function ProductsScreen() {
    const {firebaseData,updateData } = useContext(FirebaseDataContext);    
 
     return (
-        <ImageBackground source={auth.darkMode ?  require('../assets/Frame 7 (3).png') :require('../assets/Frame 7 (1).png')} style={styles.container}>
+        <View style={{flex:1,backgroundColor:auth.darkMode ? Colors.darkprimary : Colors.primary100,resizeMode: 'cover',
+        justifyContent: 'center', }} >
            {products.products && <ScrollView contentContainerStyle={styles.scrollView}>
                {products.products.map((section, sectionIndex) => (
                             <View key={sectionIndex} style={styles.section}>
@@ -49,7 +50,7 @@ function ProductsScreen() {
 ))}
             </ScrollView> }
             {products.products.length == 0 && <Text style={styles.sectionTitle}> No </Text>}
-        </ImageBackground>
+        </View>
     );
 }
 

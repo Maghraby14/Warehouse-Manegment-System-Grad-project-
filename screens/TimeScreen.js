@@ -51,7 +51,7 @@ function TimeScreen({navigation}) {
     
 
     return ( 
-        <ImageBackground source={authCtx.darkMode ?  require('../assets/Frame 7 (3).png') :require('../assets/Frame 7 (1).png')} style={{flex:1}}>
+      <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100}} >
             <ScrollView>
             <View style={{flex:1,alignItems:'center',paddingBottom:30}}>
                 {prdctx.products.map((section, sectionIndex) => ( section.map((product, productIndex) => (
@@ -64,7 +64,7 @@ function TimeScreen({navigation}) {
         </View>
         
         </ScrollView>
-        </ImageBackground>
+        </View>
         
         
     ); 

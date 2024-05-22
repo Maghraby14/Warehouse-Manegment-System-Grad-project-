@@ -54,7 +54,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   return (
-    <ImageBackground source={require('../../assets/Frame 7 (1).png')} style={{flex:1}}>
+    <View style={{flex:1,backgroundColor:Colors.primary100}} >
       
       <View style={styles.authContent}> 
       <View style={{ alignItems:'center'}}>
@@ -74,7 +74,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
         </FlatButton>
       </View>
     </View>
-    </ImageBackground>
+    </View>
     
   );
 }

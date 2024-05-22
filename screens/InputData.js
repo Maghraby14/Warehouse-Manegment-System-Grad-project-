@@ -9,6 +9,7 @@ import { AuthContext } from '../store/auth-context';
 //import ImagePicker from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
+import { Colors } from '../constants/styles';
 function InputData({route}){
     const [name,setName] = useState('');
     const [numberofSections,setNumberofSections]=useState('');
@@ -63,6 +64,16 @@ function InputData({route}){
         let b=j;
         
         for (let i = 0; i < parseInt(value); i++) {
+                            let data = [];
+
+                for (let x = length - 1; x >= 0; x--) {
+                    for (let y = b - 1; y >= a; y--) {
+                        for (let z = height - 1; z >= 0; z--) {
+                            data.push({ x, y, z });
+                        }
+                    }
+                }
+
             newSections[i] = {
                 name: `Section ${i+1}`,
                 capacity: (length*width*height)/numberofSections,
@@ -70,6 +81,7 @@ function InputData({route}){
                 y:a,
                 y1:b,
                 products: {},
+                free:data
             };
             a+=j;
             b+=j;
@@ -79,8 +91,8 @@ function InputData({route}){
         for (let i = 0; i < parseInt(value2); i++) {
             newRobots[i] = {
                 name: `Robot ${i+1}`,
-                health: '',
-                condition:'',
+                health: 100,
+                condition:f,
                 maintenancedate:"",
             };
         }
@@ -169,7 +181,7 @@ function InputData({route}){
     }; */
     
     return (
-        <ImageBackground source={require('../assets/Frame 7 (1).png')} style={{flex:1}}>
+        <View style={{flex:1,backgroundColor:Colors.primary100}} >
             <KeyboardAvoidingView style={{}} behavior="padding">
             
                 <ScrollView >
@@ -268,7 +280,7 @@ function InputData({route}){
                 </ScrollView>
                 
             </KeyboardAvoidingView>
-        </ImageBackground>
+        </View>
     );
 }
 

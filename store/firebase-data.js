@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { getDatabase, ref, onValue, update,remove } from 'firebase/database';
 
 import firebaseConfig from '../src/firebaseConfig';
 import { AuthContext } from './auth-context';
@@ -10,6 +10,8 @@ export const FirebaseDataContext = createContext();
 
 export const FirebaseDataProvider = ({ children }) => {
   const [firebaseData, setFirebaseData] = useState(null);
+  const [firebaseRobotData, setFirebaseRobotData] = useState(null);
+  const [firebaseOrderData, setFirebaseOrderData] = useState(null);
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
@@ -20,6 +22,38 @@ export const FirebaseDataProvider = ({ children }) => {
       onValue(updateProducts, (snapshot) => {
         const data = snapshot.val();
         setFirebaseData(data);
+        //console.log(data)
+      });
+    };
+
+    if (authCtx.userDataBaseid) {
+      fetchData();
+    }
+  }, [authCtx.userDataBaseid]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const updateProducts = ref(db, `Warhouses/${authCtx.userDataBaseid}/Robots`);
+      onValue(updateProducts, (snapshot) => {
+        const data = snapshot.val();
+        setFirebaseRobotData(data);
+        //console.log(data)
+      });
+    };
+
+    if (authCtx.userDataBaseid) {
+      fetchData();
+    }
+  }, [authCtx.userDataBaseid]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const updateProducts = ref(db, `Warhouses/${authCtx.userDataBaseid}/Orders`);
+      onValue(updateProducts, (snapshot) => {
+        const data = snapshot.val();
+        setFirebaseOrderData(data);
         //console.log(data)
       });
     };
@@ -47,5 +81,5 @@ export const FirebaseDataProvider = ({ children }) => {
     }
   }
 
-  return <FirebaseDataContext.Provider value={{firebaseData,updateData,removeData}}>{children}</FirebaseDataContext.Provider>;
+  return <FirebaseDataContext.Provider value={{firebaseData,updateData,removeData,firebaseRobotData,firebaseOrderData}}>{children}</FirebaseDataContext.Provider>;
 };

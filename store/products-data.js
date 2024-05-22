@@ -78,7 +78,7 @@ function ProductContextProvider({ children }) {
                             pro=subIndex;
                             sec=index;
                             
-                            return { ...product, quantity: parseInt(newQuantity) };
+                            return { ...product, Positions:[...product.Positions.slice(product.quantity-parseInt(newQuantity))],quantity: parseInt(newQuantity), };
                         }
                         return product;
                     });
@@ -143,7 +143,7 @@ function ProductContextProvider({ children }) {
     }
 
 
-    async function increaseProductQuantityById(idToUpdate, quantityToAdd) {
+    async function increaseProductQuantityById(idToUpdate, quantityToAdd,Positions) {
         let sec = 0;
             let pro = 0;
         try {const updatedProducts = Products.map((innerArray, index) => {
@@ -151,7 +151,7 @@ function ProductContextProvider({ children }) {
                 if (product.id === idToUpdate) {
                     pro=subIndex;
                     sec=index;
-                    return { ...product, quantity:parseInt(product.quantity)  + parseInt(quantityToAdd)  };
+                    return { ...product, quantity:parseInt(product.quantity)  + parseInt(quantityToAdd) , Positions: [...product.Positions, ...Positions]  };
                 }
                 
                 return product;
@@ -171,13 +171,13 @@ function ProductContextProvider({ children }) {
         // Update the products in the database and state
        // updateProductQuantityById(idToUpdate, updatedProducts[idToUpdate].quantity);
     }
-    async function addNewProduct(secindex, id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z) {
+    async function addNewProduct(secindex, id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z,Positions) {
         quantity=parseInt(quantity);
         try {
           const updatedProducts = Products.map((innerArray, index) => {
             if (index === secindex) {
               
-              return [...innerArray, { id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z}];
+              return [...innerArray, { id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z,Positions}];
             }
             
             return innerArray;

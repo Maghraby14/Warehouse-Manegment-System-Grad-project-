@@ -9,7 +9,7 @@ import { Colors } from '../constants/styles';
 import { useTranslation } from 'react-i18next';
 
 function ProductDetailsScreen({ route }) {
-    const { name, price, quantity, img, id,expiry,expired,alarm,capacity,x,y,z } = route.params.product;
+    const { name, price, quantity, img, id,expiry,expired,alarm,capacity,x,y,z,Positions } = route.params.product;
     const [cartQuantity, setCartQuantity] = useState(1);
     const cartContext = useContext(CartContext);
     const navigation = useNavigation();
@@ -21,7 +21,7 @@ function ProductDetailsScreen({ route }) {
         if (cartQuantity > quantity) {
             Alert.alert('Invalid quantity', 'You do not have the selected quantity');
         } else {
-            cartContext.addToCart(id, cartQuantity, price, img, name,expiry,expired,alarm,capacity,x,y,z);
+            cartContext.addToCart(id, cartQuantity, price, img, name,expiry,expired,alarm,capacity,x,y,z,Positions.slice(0,cartQuantity));
             prdctx.updateProductQuantityById(id, quantity - cartQuantity);
             navigation.navigate('Home');
         }
@@ -29,7 +29,7 @@ function ProductDetailsScreen({ route }) {
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={styles.container}>
+            <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100,resizeMode:'cover'}} >
                 <Animatable.View animation="fadeIn" duration={1000} style={styles.content}>
                     <Animatable.Image animation="fadeIn" duration={1000} source={{ uri: img }} style={styles.image} />
                     <Animatable.View animation="fadeIn" duration={1000} style={[styles.ctr, { backgroundColor: authCtx.darkMode && !expired ? Colors.darksec2 : !authCtx.darkMode && !expired ? Colors.white : Colors.primary500 }]}>
@@ -55,7 +55,7 @@ function ProductDetailsScreen({ route }) {
                         </View>
                     </Animatable.View>
                 </Animatable.View>
-            </ImageBackground>
+            </View>
         </KeyboardAvoidingView>
     );
 }

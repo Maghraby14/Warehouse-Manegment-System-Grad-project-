@@ -20,7 +20,7 @@ function CartContextProvider({ children }) {
     useEffect(() => {
         const update = async () => {
             try {
-                const requestBody = cartProducts.length === 0 ? { Cart: "" } : { Cart: cartProducts };
+                const requestBody =  { Cart: cartProducts };
                 updateData(`Warhouses/${authctx.userDataBaseid}`,requestBody)
                 //await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${authctx.userDataBaseid}.json`, requestBody);
             } catch (error) {
@@ -49,20 +49,20 @@ function CartContextProvider({ children }) {
         load();
     }, [authctx.userDataBaseid]);
     
-    function addToCart(id, quantity, price, img, name,expiry,expired,alarm,capacity,x,y,z) {
+    function addToCart(id, quantity, price, img, name,expiry,expired,alarm,capacity,x,y,z,Positions) {
         let productInCart = cartProducts.some((product) => product.id === id);
     
         if (productInCart) {
             const updatedCart = cartProducts.map((product) => {
                 if (product.id === id) {
-                    return { ...product, quantity: parseInt(quantity) + parseInt(product.quantity) };
+                    return { ...product, quantity: parseInt(quantity) + parseInt(product.quantity),  Positions: [...product.Positions, ...Positions] };
                 } else {
                     return product;
                 }
             });
             setCartProducts(updatedCart);
         } else {
-            setCartProducts((current) => [...current, { id, quantity, price, img, name,expiry,expired,alarm,capacity,x,y,z }]);
+            setCartProducts((current) => [...current, { id, quantity, price, img, name,expiry,expired,alarm,capacity,x,y,z,Positions:Positions }]);
         }
     
         console.log(cartProducts);
@@ -72,7 +72,7 @@ function CartContextProvider({ children }) {
         setCartProducts([]);
     }
 
-    async function removeFromCart(id,quantity,img,name,price,expiry,expired,alarm,capacity,x,y,z) {
+    async function removeFromCart(id,quantity,img,name,price,expiry,expired,alarm,capacity,x,y,z,Positions) {
         let productinpro = false;
         prdctx.products.map((sec)=>{
             sec.map((product)=>{
@@ -85,15 +85,15 @@ function CartContextProvider({ children }) {
         try {
             if (productinpro){
                 setCartProducts((current) => current.filter((product) => product.id !== id));
-             prdctx.increaseProductQuantityById(id, quantity);
+             prdctx.increaseProductQuantityById(id, quantity,Positions);
             }
             else{
                 for (let secindex = 0; secindex < firebaseData.length; secindex++) {
-                    console.log(firebaseData[0].y1)
+                    //console.log(firebaseData[0].y1)
                     if (firebaseData[secindex].y < y && firebaseData[secindex].y1 > y){
                         setCartProducts((current) => current.filter((product) => product.id !== id));
                       console.log('IN CART' , secindex, id, quantity, img, name, price)
-                      prdctx.addNewProduct(secindex, id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z);
+                      prdctx.addNewProduct(secindex, id, quantity, img, name, price,expiry,expired,alarm,capacity,x,y,z,Positions);
                       break; // Stop the loop once the condition is met
                     }
         

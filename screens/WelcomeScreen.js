@@ -14,19 +14,22 @@ import {FirebaseDataContext} from '../store/firebase-data'
 import { Colors } from '../constants/styles';
 import FeedItem from '../components/WelcomeScreenComponents/FeedItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RobotsContext } from '../store/robots-context';
+import { OrdersContext } from '../store/order-context';
 
 function WelcomeScreen({navigation,route}) {
   const authCtx =useContext(AuthContext);
   const [dataLoaded,setdataLoaded] =useState(false);
   const [alarm,setalarm] = useState(false);
    const [expired,setexpired] = useState(false);
+   const [on,setOn] = useState(false);
    const [feed,setfeed] = useState([
     
    ]);
-   const { firebaseData, updateData } = useContext(FirebaseDataContext);
-   
-
-  
+   const { firebaseData, updateData,firebaseRobotData,firebaseOrderData } = useContext(FirebaseDataContext);
+   const robotsCtx = useContext(RobotsContext)
+   const ordersCtx = useContext(OrdersContext);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -90,6 +93,41 @@ function WelcomeScreen({navigation,route}) {
     fetchData();
     //console.log(db)
   }, [firebaseData]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (authCtx.userDataBaseid) {
+          //console.log(db[authCtx.userDataBaseid].Space);
+          const response = firebaseRobotData;
+          robotsCtx.setData(response)
+        }
+      } catch (error) {
+        console.log('Error fetching data:', error);
+        robotsCtx.setData([])
+      }
+    };
+  
+    fetchData();
+    //console.log(db)
+  }, [firebaseRobotData]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (authCtx.userDataBaseid) {
+          //console.log(db[authCtx.userDataBaseid].Space);
+          const response = firebaseOrderData;
+          //console.log(response.Ongoing)
+          ordersCtx.setData(response)
+        }
+      } catch (error) {
+        console.log('Error fetching data:', error);
+        //products.loadProducts([]);
+      }
+    };
+  
+    fetchData();
+    //console.log(db)
+  }, [firebaseOrderData]);
 
   
   useEffect(()=>{
@@ -109,6 +147,19 @@ function WelcomeScreen({navigation,route}) {
           setalarm(false);
         setexpired(false);
         }
+        else if(notification.request.content.data.order){
+          //console.log(notification.request.content)
+          setfeed(prev => [
+            ...prev,
+            {
+                title: notification.request.content.title,
+                body: notification.request.content.body,
+                data: notification.request.content.data
+            }
+        ]);
+        console.log(feed);
+            setOn(false)
+          }
         
         
         
@@ -177,7 +228,7 @@ useEffect(() => {
         product.alarm = true;
         products.setAlarm(product.id);
         setalarm(true);
-        scheduleNotificationHandler(1, 'Remaider', product.name + " Only has 3 days to be removed from Warehouse", { product: product });
+        scheduleNotificationHandler(1, 'Reminder', product.name + " Only has 3 days to be removed from Warehouse", { product: product });
       }
      else if(Math.floor(difference / 1000) < 0) {
         if (!product.expired && !expired) {
@@ -189,6 +240,23 @@ useEffect(() => {
       
     }
   };
+  const getDateDifferenceOrder = (order) => {
+    const targetDate = new Date(order.time);
+    const currentDate = new Date();
+    const difference = targetDate - currentDate;
+    //const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
+    //console.log(difference)
+      if(Math.floor(difference / 1000) < 0) {
+        if (!order.on && !on) {
+          order.on = true;
+          
+          setOn(true);
+          ordersCtx.setOn(order.name);
+          scheduleNotificationHandler(1, 'Order Pending', order.name + " Will Be Shipped", { order: order });
+        }
+      
+    }
+  };
 
   const interval = setInterval(() => {
     products.products.forEach((sec) => {
@@ -196,17 +264,22 @@ useEffect(() => {
         getDateDifference(pro);
       });
     });
+    ordersCtx.Scheduled.forEach((order) => {
+      
+      getDateDifferenceOrder(order);
+  
+  });
   }, 1000);
 
   return () => clearInterval(interval);
-}, [products.products]);
+}, [products.products,ordersCtx.Scheduled]);
 const handleClearFeed = (index) => {
   setfeed(prev => prev.filter((_, idx) => idx !== index));
 };
 
 
 return (
-  <ImageBackground source={authCtx.darkMode ? require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={{ flex: 1 }}>
+  <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100}} >
     {dataLoaded &&   
       <View style={{ alignItems: 'center', flex: 1 }}>
         <ProfileCard name={authCtx.name} uri={authCtx.profuri}/>
@@ -221,14 +294,16 @@ return (
         </View>
         {
           feed.length>0 && 
-          <GestureHandlerRootView style={{ width:'100%' ,alignItems: 'center', paddingBottom: 10}} contentContainerStyle={{ alignItems: 'center', paddingBottom: 10,justifyContent:'center' }}>
+          <GestureHandlerRootView style={{ flex:1 ,alignItems: 'center', paddingBottom: 10}} contentContainerStyle={{ alignItems: 'center', paddingBottom: 10,justifyContent:'center' }}>
           
             <FlatList 
             data={feed}
             renderItem={({item,index})=>{
               return <FeedItem key={index} index={index} title={item.title} onPress={() => handleClearFeed(index)} body={item.body}  onMove={()=>{navigation.navigate('ProductDetails',{
                 product:item.data.product
-            })}}/>; 
+            })}}
+            contentContainerStyle={{alignItems:'center'}}
+            />; 
             }}
             />
             
@@ -240,7 +315,7 @@ return (
       </View>
     }
     {!dataLoaded && <LoadingOverlay message='Loading Your Data'/>}
-  </ImageBackground>
+  </View>
 );
 
   /* <View style={styles.rootContainer}>

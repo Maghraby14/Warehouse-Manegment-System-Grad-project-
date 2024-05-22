@@ -12,7 +12,7 @@ function ProfileScreen(){
    const {t} = useTranslation();    
     
     return <>
-    <ImageBackground source={authCtx.darkMode ?  require('../assets/Frame 7 (3).png') : require('../assets/Frame 7 (1).png')} style={{flex:1}}>
+    <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100}} >
     <View style={{alignItems:'center' ,flex:1}}>
     <ProfileInfo name={authCtx.name} uri={authCtx.profuri}/>
     <View style={[styles.flowContainer, {backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.primary100}]}>
@@ -32,7 +32,7 @@ function ProfileScreen(){
     <ProfileOptions isDarkModeEnabled={authCtx.darkMode} toggleDarkMode={authCtx.toggledarkMode} />
     
     </View>
-    </ImageBackground>
+    </View>
     
     </>
 }

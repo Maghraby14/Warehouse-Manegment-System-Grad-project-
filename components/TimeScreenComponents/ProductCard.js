@@ -20,7 +20,7 @@ function ProductCard({name,img,product}) {
     useEffect(() => {
         const interval = setInterval(() => {
             setTimeRemaining(getDateDifference(product.expiry));
-        }, 100);
+        }, 50);
         return () => clearInterval(interval);
     }, [product.expiry]);
 
@@ -47,24 +47,30 @@ function ProductCard({name,img,product}) {
     }
 
     function getDateDifference(targetDate) {
-        targetDate = new Date(targetDate);
-        const currentDate = new Date();
-        const difference = targetDate - currentDate;
-        const secondsDifference = Math.floor(difference / 1000);
-        const minutesDifference = Math.floor(difference / (1000 * 60));
-        const hoursDifference = Math.floor(difference / (1000 * 60 * 60));
-        const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
-
-        if (daysDifference >= 1) {
-            return `${daysDifference} day${daysDifference !== 1 ? 's' : ''}`;
-        } else if (hoursDifference >= 1) {
-            return `${hoursDifference} hour${hoursDifference !== 1 ? 's' : ''}`;
-        } else if (minutesDifference >= 1) {
-            return `${minutesDifference} minute${minutesDifference !== 1 ? 's' : ''}`;
-        } else {
-            return `${secondsDifference} second${secondsDifference !== 1 ? 's' : ''}`;
-        }
-    }
+      targetDate = new Date(targetDate);
+      const currentDate = new Date();
+      const difference = targetDate - currentDate;
+      const secondsDifference = Math.floor(difference / 1000);
+      const minutesDifference = Math.floor(difference / (1000 * 60));
+      const hoursDifference = Math.floor(difference / (1000 * 60 * 60));
+      const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const monthsDifference = Math.floor(daysDifference / 30);
+      const yearsDifference = Math.floor(daysDifference / 365);
+  
+      if (yearsDifference >= 1) {
+          return `${yearsDifference} year${yearsDifference !== 1 ? 's' : ''}`;
+      } else if (monthsDifference >= 1) {
+          return `${monthsDifference} month${monthsDifference !== 1 ? 's' : ''}`;
+      } else if (daysDifference >= 1) {
+          return `${daysDifference} day${daysDifference !== 1 ? 's' : ''}`;
+      } else if (hoursDifference >= 1) {
+          return `${hoursDifference} hour${hoursDifference !== 1 ? 's' : ''}`;
+      } else if (minutesDifference >= 1) {
+          return `${minutesDifference} minute${minutesDifference !== 1 ? 's' : ''}`;
+      } else {
+          return `${secondsDifference} second${secondsDifference !== 1 ? 's' : ''}`;
+      }
+  }
 
     return ( 
         <View style={[styles.container,{backgroundColor: authCtx.darkMode && !timeRemaining.startsWith("-") ? Colors.darksec2 : authCtx.darkMode && timeRemaining.startsWith("-") ? '#FF004D' :  !authCtx.darkMode && !timeRemaining.startsWith("-") ? 'white' : '#FF004D'},]}>
@@ -80,7 +86,7 @@ function ProductCard({name,img,product}) {
                 <Animatable.View animation="bounceIn" duration={1000}>
                     {
                         timeRemaining.startsWith("-") && 
-                        <TouchableOpacity onPress={removeNow} style={[styles.button, 
+                        <TouchableOpacity onPress={addToCart} style={[styles.button, 
                             { backgroundColor: authCtx.darkMode && !timeRemaining.startsWith("-") ? Colors.darkprimary : authCtx.darkMode && timeRemaining.startsWith("-") ? Colors.primary800 : !authCtx.darkMode && !timeRemaining.startsWith("-") ? Colors.primary100 : '#1D2B53' }]}>
                             <Text style={[styles.buttonText]}>{"Remove now" }</Text>
                         </TouchableOpacity>
