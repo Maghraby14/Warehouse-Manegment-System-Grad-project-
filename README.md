@@ -41,34 +41,34 @@ The Warehouse Management System (WMS) is a mobile application developed using Re
 ## Screenshots
 
 ### Products Screen
-<img src="screenshots/products.jpeg" alt="Products Screen" width="300px">
+<img src="assets/products.jpeg" alt="Products Screen" width="300px">
 
 ### Robots Screen
-<img src="screenshots/robots.jpeg" alt="Robots Screen" width="300px">
+<img src="assets/robots.jpeg" alt="Robots Screen" width="300px">
 
 ### Profile Screen
-<img src="screenshots/profile.jpeg" alt="Profile Screen" width="300px">
+<img src="assets/profile.jpeg" alt="Profile Screen" width="300px">
 
 ### Home Screen
-<img src="screenshots/home.jpeg" alt="Home Screen" width="300px">
+<img src="assets/home.jpeg" alt="Home Screen" width="300px">
 
 ### Reports Screen
-<img src="screenshots/reports.jpeg" alt="Reports Screen" width="300px">
+<img src="assets/reports.jpeg" alt="Reports Screen" width="300px">
 
 ### Orders Screen
-<img src="screenshots/orders.jpeg" alt="Orders Screen" width="300px">
+<img src="assets/orders.jpeg" alt="Orders Screen" width="300px">
 
 ### Space Screen
-<img src="screenshots/space.jpeg" alt="Space Screen" width="300px">
+<img src="assets/space.jpeg" alt="Space Screen" width="300px">
 
 ### Time Screen
-<img src="screenshots/time.jpeg" alt="Time Screen" width="300px">
+<img src="assets/time.jpeg" alt="Time Screen" width="300px">
 
 ### Cart Screen
-<img src="screenshots/cart.jpeg" alt="Cart Screen" width="300px"> 
+<img src="assets/cart.jpeg" alt="Cart Screen" width="300px"> 
 
 ### Dark Mode
-<img src="screenshots/dark.jpeg" alt="Dark Screen" width="300px"> 
+<img src="assets/dark.jpeg" alt="Dark Screen" width="300px"> 
 
 ## Contributors
 - **Mohamed El-Maghraby** (Project Lead & Developer)
