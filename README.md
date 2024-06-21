@@ -56,7 +56,7 @@ The Warehouse Management System (WMS) is a mobile application developed using Re
 <img src="assets/reports.jpeg" alt="Reports Screen" width="300px">
 
 ### Orders Screen
-<img src="assets/orders.jpeg" alt="Orders Screen" width="300px">
+<img src="assets/order.jpeg" alt="Orders Screen" width="300px">
 
 ### Space Screen
 <img src="assets/space.jpeg" alt="Space Screen" width="300px">
