@@ -65,7 +65,7 @@ function CartContextProvider({ children }) {
             setCartProducts((current) => [...current, { id, quantity, price, img, name,expiry,expired,alarm,capacity,x,y,z,Positions:Positions }]);
         }
     
-        console.log(cartProducts);
+        //console.log(cartProducts);
     }
     
     function clearCart(){

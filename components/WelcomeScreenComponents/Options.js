@@ -14,7 +14,7 @@ function Options(){
     const {firebaseRobotData} = useContext(FirebaseDataContext);
     const r = useContext(RobotsContext);
    async function navigatetoReports(){
-    
+   /* 
 await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${auth.userDataBaseid}.json`, {
   "Email": "mnelmaghraby145@gmail.com",
   "Owner": "Mohamed El-Maghraby",
@@ -1682,7 +1682,7 @@ await axios.patch(`https://react-native-course-778b3-default-rtdb.firebaseio.com
     "Pending": '',
     "Scheduled": "",
   },
-});
+});*/
       //const response = await axios.get(`https://react-native-course-778b3-default-rtdb.firebaseio.com/Warhouses/${auth.userDataBaseid}`+'.json');
       //console.log(response.data['Owner']);
       

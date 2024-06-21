@@ -10,7 +10,9 @@ export const OrdersContext = createContext({
     setData:(response)=>{},
     addOrderNow:(number,time,Products)=>{},
     addOrderSchedule:(number,time,Products)=>{},
-    setOn:(idToUpdate)=>{}
+    setOn:(idToUpdate)=>{},
+    removeOrder:(name)=>{},
+    hist:[]
 });
 
 function OrdersContextProvider({ children }) {
@@ -21,6 +23,7 @@ function OrdersContextProvider({ children }) {
     const [ongoing, setOngoing] = useState([]);
     const [positions,setPositions] = useState([]);
     const [now,setNow] = useState([]);
+    const [history,SetHistory]=useState([]);
     useEffect(() => {
         if (ongoing.length === 0 && pending.length > 0) {
             const nonOngoingOrder = pending.find(order => !order.ongoing);
@@ -77,6 +80,8 @@ function OrdersContextProvider({ children }) {
         }
 
       if (positions.length === 0 && ongoing.length>0 && now.length===0){
+        SetHistory([...history,ongoing]);
+        updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, {history:history});
         setOngoing([])
         updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, {Ongoing:[]});
       }
@@ -197,6 +202,13 @@ function OrdersContextProvider({ children }) {
         // Handle error
     }
 }
+function removeOrder(name){
+    console.log(name)
+    const updatedScheduled = scheduled.filter(order => order.name !== name);
+    console.log(updatedScheduled)
+    setScheduled(updatedScheduled)
+    updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, {  Scheduled: updatedScheduled });
+}
 
     const value = {
         Scheduled: scheduled,
@@ -205,7 +217,9 @@ function OrdersContextProvider({ children }) {
         setData:setData,
         addOrderNow:addOrderNow,
         addOrderSchedule:addOrderSchedule,
-        setOn:setOn
+        setOn:setOn,
+        removeOrder:removeOrder,
+        hist:history
         
     };
 

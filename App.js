@@ -37,6 +37,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import PendingOrdersScreen from './screens/PendingOrdersScreen';
 import OngoingOrdersScreen from './screens/OngoingOrdersScreen';
 import ScheduldedOrdersScreen from './screens/ScheduledOrdersScreen';
+import History from './screens/History';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({ 
       
@@ -117,6 +118,31 @@ function MyTabs() {
         name="Ongoing" 
         component={OngoingOrdersScreen} 
         options={{ title: 'Ongoing'  ,   tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  }}}
+      />
+    </Tab.Navigator>
+  );
+}
+function Reports() {
+  const authCtx = useContext(AuthContext)
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: Colors.white,
+        tabBarActiveTintColor: Colors.white,
+        tabBarIndicatorStyle:{backgroundColor:Colors.white}
+      }}
+ 
+    >
+      <Tab.Screen 
+        name="History" 
+        component={History} 
+        options={{ title: 'History' ,   tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  } }}
+      />
+      <Tab.Screen 
+        name="Frequently" 
+        component={History} 
+        options={{ title: 'Frequently Ordered' ,  tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  } }}
       />
     </Tab.Navigator>
   );
@@ -260,7 +286,7 @@ function Navigation() {
         headerTintColor: Colors.white,
       }} />
 
-      <Stack.Screen name='Reports' component={ReportsScreen} 
+      <Stack.Screen name='Reports' component={Reports} 
       options={{
         title:t('reports'),
 
@@ -314,7 +340,7 @@ function Navigation() {
       <Stack.Screen name='SectionDetails' component={SectionDetailsScreen} options={{
         headerStyle: { backgroundColor: authCtx.darkMode? Colors.darkprimary : Colors.primary100  },
         headerTintColor: Colors.white,
-      title:t('productDetails')
+      title:t('Section Details')
     }}/>
 
       

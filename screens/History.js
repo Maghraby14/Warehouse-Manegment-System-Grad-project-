@@ -1,49 +1,27 @@
 import { useContext } from 'react';
-import {Text, View,StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import {Text, View,StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import { AuthContext } from '../store/auth-context';
 import { Colors } from '../constants/styles';
 import * as Animatable from 'react-native-animatable'; 
 import { OrdersContext } from '../store/order-context';
 import ProductItem from '../components/OrderScreenComponents/Productitem';
-import { CartContext } from '../store/cart-context';
-function ScheduldedOrdersScreen({navigation}){
+function History({navigation}){
     const authCtx = useContext(AuthContext)
     const ordersCtx = useContext(OrdersContext);
-    const cartContext = useContext(CartContext);
-    function handle(name){
-        ordersCtx.Scheduled.map((order)=>{
-            if(order.name === name){
-            order.products.map((product)=>{
-                cartContext.addToCart(product.id, product.quantity, product.price, product.img, product.name,product.expiry,product.expired,product.alarm,product.capacity,product.x,product.y,product.z,product.Positions);
-                ordersCtx.removeOrder(name); 
-            })
-            }
-        })
-       // 
-    }
-    function handleremove(name){
-        Alert.alert('Warning','Are You Sure You Want to Remove This Product From Orders And Return it To Cart',[{
-            text:'Yes',style:'cancel',onPress:()=>{
-                handle(name)
-            }
-        },{
-            text:'No',style:'default',
-        }])
-    }
     return (
         <View style={{flex:1,backgroundColor:authCtx.darkMode ? Colors.darkprimary : Colors.primary100,resizeMode: 'cover',alignItems:'center',flexDirection:'column',justifyContent:'center' }} >
             <ScrollView contentContainerStyle={styles.scrollView}>
             <View  style={{flex:1,marginBottom:10}}>
             <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.white}]}>
                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>Orders</Text>
-                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {ordersCtx.Scheduled.length}</Text>
+                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {ordersCtx.Ongoing.length}</Text>
             </View>
             </View>
             {
-              ordersCtx.Scheduled && 
+              ordersCtx.Ongoing && 
               
                 
-              ordersCtx.Scheduled.map((order, index) => (
+              ordersCtx.hist.map((order, index) => (
                 <View style={[styles.orderContainer,{backgroundColor:authCtx.darkMode ? Colors.darksec : Colors.primary100}]} key={index}>
                     <Text style={styles.orderText}>Order ID: {order.name}</Text>
                     <Text style={styles.orderText}>To be ordered: {order.time.split("T")[0]}</Text>
@@ -56,11 +34,7 @@ function ScheduldedOrdersScreen({navigation}){
                         ))
                     }
                      <View style={{alignItems:'center',margin:10}}>
-                    <Animatable.View animation="bounceIn" duration={1000}>
-                                <TouchableOpacity onPress={handleremove.bind(self,order.name)} style={[styles.button, { backgroundColor: authCtx.darkMode ? Colors.darksec2 : Colors.sec100 }]}>
-                                    <Text style={[styles.buttonText]}>{"Remove"}</Text>
-                                </TouchableOpacity>
-            </Animatable.View>
+                    
             </View>
                 </View>
             ))
@@ -69,15 +43,7 @@ function ScheduldedOrdersScreen({navigation}){
               
               
             }
-            <View style={{alignItems:'center',margin:10}}>
-
-            <Animatable.View animation="bounceIn" duration={1000}>
-                                <TouchableOpacity onPress={()=>{navigation.navigate('Cart')}} style={[styles.button, { backgroundColor: authCtx.darkMode ? Colors.darksec2 : Colors.sec100 }]}>
-                                    <Text style={[styles.buttonText]}>{"Add an Order"}</Text>
-                                </TouchableOpacity>
-            </Animatable.View>
             
-            </View>
     
     </ScrollView>
     </View>
@@ -118,7 +84,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight:'bold'
     }, orderContainer: {
-        backgroundColor: Colors.primary100,
+        
         borderRadius: 10,
         padding: 10,
         marginVertical: 10,
@@ -140,4 +106,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ScheduldedOrdersScreen;
+export default History;
