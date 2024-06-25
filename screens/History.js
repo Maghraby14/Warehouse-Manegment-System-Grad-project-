@@ -13,12 +13,18 @@ function History({navigation}){
             <ScrollView contentContainerStyle={styles.scrollView}>
             <View  style={{flex:1,marginBottom:10}}>
             <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.white}]}>
-                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>Orders</Text>
-                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {ordersCtx.Ongoing.length}</Text>
+                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>InGoing</Text>
+                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {0}</Text>
+            </View>
+            </View>
+            <View  style={{flex:1,marginBottom:10}}>
+            <View style={[styles.secctr,{backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.white}]}>
+                                <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>Ongoing</Text>
+                                 <Text style={[styles.sectionTitle,{color:authCtx.darkMode ? Colors.white : '#000'}]}>{'Total'}: {ordersCtx.hist.length}</Text>
             </View>
             </View>
             {
-              ordersCtx.Ongoing && 
+              ordersCtx.hist && 
               
                 
               ordersCtx.hist.map((order, index) => (
@@ -44,7 +50,7 @@ function History({navigation}){
               
             }
             
-    
+            
     </ScrollView>
     </View>
     )

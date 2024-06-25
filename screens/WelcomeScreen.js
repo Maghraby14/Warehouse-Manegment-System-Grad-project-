@@ -299,9 +299,18 @@ return (
             <FlatList 
             data={feed}
             renderItem={({item,index})=>{
-              return <FeedItem key={index} index={index} title={item.title} onPress={() => handleClearFeed(index)} body={item.body}  onMove={()=>{navigation.navigate('ProductDetails',{
-                product:item.data.product
-            })}}
+              return <FeedItem key={index} index={index} title={item.title} onPress={() => handleClearFeed(index)} body={item.body}  onMove={()=>{
+              if(item.data.product){
+                navigation.navigate('ProductDetails',{
+                  product:item.data.product
+              })
+              }
+              else{
+                navigation.navigate('Orders',{screen:'Ongoing'})
+              }  
+                
+          
+          }}
             contentContainerStyle={{alignItems:'center'}}
             />; 
             }}

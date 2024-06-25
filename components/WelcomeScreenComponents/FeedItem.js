@@ -34,7 +34,7 @@ const FeedItem = ({ title, body, onPress, index,onMove }) => {
           onPress={onMove}
           style={[styles.clearButton, { backgroundColor: authCtx.darkMode ? Colors.darksec : Colors.primary100 }]}
         >
-          <Text style={styles.clearButtonText}>{title === 'Product Expired' ? "Remove From Warehouse" : "Make An Order"}</Text>
+          <Text style={styles.clearButtonText}>{title === 'Product Expired' ? "Remove From Warehouse" : "View Order"}</Text>
         </TouchableOpacity>
       </View>
     </Swipeable>

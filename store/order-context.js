@@ -12,7 +12,7 @@ export const OrdersContext = createContext({
     addOrderSchedule:(number,time,Products)=>{},
     setOn:(idToUpdate)=>{},
     removeOrder:(name)=>{},
-    hist:[]
+    hist:[],
 });
 
 function OrdersContextProvider({ children }) {
@@ -80,8 +80,9 @@ function OrdersContextProvider({ children }) {
         }
 
       if (positions.length === 0 && ongoing.length>0 && now.length===0){
-        SetHistory([...history,ongoing]);
-        updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, {history:history});
+        const updatedHistory = [...history, ...ongoing]; // Flatten the history array
+        SetHistory(updatedHistory);
+        updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, { history: updatedHistory })
         setOngoing([])
         updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, {Ongoing:[]});
       }
@@ -89,6 +90,16 @@ function OrdersContextProvider({ children }) {
         if(now[0])
         {
             if(now[0].done){
+                console.log('Now is',now)
+                firebaseData.map((sec,i)=>{
+                    console.log(sec.x,sec.x1,sec.y,sec.y1)
+                    console.log(now[0].y)
+                        if(sec.y <= now[0].y && sec.y1 > now[0].y){
+                            const added = {x:now[0].x , y:now[0].y , z:now[0].z}
+                           
+                            updateData(`Warhouses/${authctx.userDataBaseid}/Space/${i}`,{free:[...firebaseData[i].free,added]})
+                    }
+                })
                 updateData(`Warhouses/${authctx.userDataBaseid}/Orders`, { now:[] });
             }
             
@@ -128,6 +139,12 @@ function OrdersContextProvider({ children }) {
         }
         else{
             setNow([])
+        }
+        if(response.history){
+            SetHistory(response.history)
+        }
+        else{
+            SetHistory([])
         }
     }
    async function addOrderNow(number,time,products){

@@ -4,7 +4,7 @@ import { AuthContext } from "../../store/auth-context";
 import { useContext } from "react";
 import { Colors } from "../../constants/styles";
 import { useTranslation } from "react-i18next";
-function ProductItem({ product, onPress,id }) {
+function ProductItem({ product, onPress,id,quantity }) {
     const navigation = useNavigation();
     const authCtx = useContext(AuthContext);
     const {t} = useTranslation();
@@ -30,7 +30,7 @@ function ProductItem({ product, onPress,id }) {
       <View style={[styles.infoContainer]}>
         <Text style={[styles.name,{color: authCtx.darkMode? Colors.white: '#000'}]}>{product.name}</Text>
         <Text style={styles.price}>{t('Price')}: ${product.price}</Text>
-        <Text style={styles.quantity}>{t("Quantity")}: {product.quantity}</Text>
+       {!quantity && <Text style={styles.quantity}>{t("Quantity")}: {product.quantity}</Text>}
       </View>
     </View>
   );

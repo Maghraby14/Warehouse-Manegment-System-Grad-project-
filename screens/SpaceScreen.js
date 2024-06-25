@@ -13,13 +13,16 @@ function SpaceScreen({navigation}) {
     const prdctx = useContext(ProductContext);
     const {firebaseData,updateData } = useContext(FirebaseDataContext);
     let occupiedSpace = 0; 
-    prdctx.products.map((section) =>{
-        section.map((product) =>{
-            occupiedSpace += product.quantity
-        }
-        )
-        
-    })
+    if(prdctx.products){
+        prdctx.products.map((section) =>{
+            section.map((product) =>{
+                occupiedSpace += product.quantity
+            }
+            )
+            
+        })
+    }
+    
     //console.log(ocupied);
     const totalSpace = prdctx.WarehouseCapacity; // Example total space value
      // Example occupied space value
@@ -68,12 +71,13 @@ function SpaceScreen({navigation}) {
                    
                </View>
                <View style={{flex:1,alignItems:'center'}}>
-               {prdctx.products.map((section, sectionIndex) => ( section.map((product, productIndex) => (
-                                   <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
-                                  
-                                   <ProductCard  product={product} />
-                               </Animatable.View>
-                ))))}
+               { prdctx.products.map((section, sectionIndex) => (
+    prdctx.products[sectionIndex] && section.map((product, productIndex) => (
+        <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
+            <ProductCard product={product} />
+        </Animatable.View>
+    ))
+))}
                </View>
                
 

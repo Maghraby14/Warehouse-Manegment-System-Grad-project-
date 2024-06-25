@@ -38,6 +38,7 @@ import PendingOrdersScreen from './screens/PendingOrdersScreen';
 import OngoingOrdersScreen from './screens/OngoingOrdersScreen';
 import ScheduldedOrdersScreen from './screens/ScheduledOrdersScreen';
 import History from './screens/History';
+import FrequentlyOrdered from './screens/FrequentlyOrdered';
 Notifications.setNotificationHandler({
   handleNotification: async () => ({ 
       
@@ -141,7 +142,7 @@ function Reports() {
       />
       <Tab.Screen 
         name="Frequently" 
-        component={History} 
+        component={FrequentlyOrdered} 
         options={{ title: 'Frequently Ordered' ,  tabBarStyle: { backgroundColor: authCtx.darkMode ? Colors.darkprimary:Colors.primary100  } }}
       />
     </Tab.Navigator>

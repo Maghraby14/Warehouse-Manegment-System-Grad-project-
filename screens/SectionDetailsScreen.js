@@ -13,13 +13,16 @@ function SectionDetailsScreen({navigation,route}) {
     const authCtx = useContext(AuthContext);
     const prdctx = useContext(ProductContext);
     const {firebaseData,updateData } = useContext(FirebaseDataContext);
-    let occupiedSpace = 0; 
-    products.map((product) =>{
+    let occupiedSpace = 0;
+    if (products){
+        products.map((product) =>{
             occupiedSpace += product.quantity
         
         
         
     })
+    } 
+    
     //console.log(ocupied);
     const totalSpace = capacity; // Example total space value
      // Example occupied space value
@@ -54,12 +57,15 @@ function SectionDetailsScreen({navigation,route}) {
                    
                </View>
                <View style={{flex:1,alignItems:'center'}}>
-               {products.map((product, productIndex) => (
-                                   <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
-                                  
-                                   <ProductCard  product={product} />
-                               </Animatable.View>
-                ))}
+               
+               {
+    products && products.map((product, productIndex) => (
+        <Animatable.View key={productIndex} animation="fadeIn" duration={1000}>
+            <ProductCard product={product} />
+        </Animatable.View>
+    ))
+}
+
                </View>
                
 
